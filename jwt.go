@@ -1,4 +1,4 @@
-package jwt_middleware
+package medad_jwt_middleware
 
 import (
 	"context"
@@ -16,6 +16,8 @@ type Config struct {
 	ProxyHeaderName string `json:"proxyHeaderName,omitempty"`
 	AuthHeader string `json:"authHeader,omitempty"`
 	HeaderPrefix string `json:"headerPrefix,omitempty"`
+	SecretKey string `json:"secretKey,omitempty"`
+	AccessKey string `json:"accessKey,omitempty"`
 }
 
 
@@ -49,12 +51,12 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 		config.HeaderPrefix = "Bearer"
 	}
 
-	if len(config.secretKey) == 0 {
-		config.secretKey = "Secret-Key"
+	if len(config.SecretKey) == 0 {
+		config.SecretKey = "Secret-Key"
 	}
 
-	if len(config.accessKey) == 0 {
-		config.secretKey = "Access-Key"
+	if len(config.AccessKey) == 0 {
+		config.AccessKey = "Access-Key"
 	}
 
 	return &JWT{
@@ -64,6 +66,8 @@ func New(ctx context.Context, next http.Handler, config *Config, name string) (h
 		proxyHeaderName: config.ProxyHeaderName,
 		authHeader: config.AuthHeader,
 		headerPrefix: config.HeaderPrefix,
+        secretKey: config.SecretKey,
+        accessKey: config.AccessKey,
 	}, nil
 }
 
